@@ -13,34 +13,60 @@ public class CustomeTable extends Component {
     /* =====================
        Public listener API
        ===================== */
-    public Registration addRowDeleteListener(
-            ComponentEventListener<RowDeleteEvent> listener) {
-        return addListener(RowDeleteEvent.class, listener);
+    public Registration addReactUiListener(
+            ComponentEventListener<ReactUiEvent> listener) {
+        return addListener(ReactUiEvent.class, listener);
     }
 
     /* =====================
        React bus event
        ===================== */
-    @DomEvent("row-delete")
-    public static class RowDeleteEvent
+    @DomEvent("react:ui")
+    public static class ReactUiEvent
             extends ComponentEvent<CustomeTable> {
 
-        private final String rowId;
+        private final String type;
+        private final String payloadJson;
+        private final String envelopeJson;
 
-        public RowDeleteEvent(
+        public ReactUiEvent(
                 CustomeTable source,
                 boolean fromClient,
 
-                // payload
-                @EventData("event.detail.rowId") String rowId
+                // envelope fields
+                @EventData("event.detail.type") String type,
+
+                // payload JSON
+                @EventData("JSON.stringify(event.detail.payload)")
+                String payloadJson,
+
+                // full envelope JSON (optional but VERY useful)
+                @EventData("JSON.stringify(event.detail)")
+                String envelopeJson
         ) {
             super(source, fromClient);
-            this.rowId = rowId;
+            this.type = type;
+            this.payloadJson = payloadJson;
+            this.envelopeJson = envelopeJson;
         }
 
+        public String getType() {
+            return type;
+        }
 
-        public String getRowId() {
-            return rowId;
+        public String getPayloadJson() {
+            return payloadJson;
+        }
+
+        public String getEnvelopeJson() {
+            return envelopeJson;
+        }
+
+        /* =====================
+           Helpers
+           ===================== */
+        public boolean isType(String expected) {
+            return expected.equals(type);
         }
     }
 }

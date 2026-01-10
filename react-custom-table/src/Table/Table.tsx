@@ -2,7 +2,8 @@
 import "../index.css";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../app/store";
-import { deleteRow, setPage } from "./TableSlice";
+import {setPage } from "./TableSlice";
+import { sendToJmix } from "../bridge/jmixBus";
 
 export default function CustomTable() {
   const dispatch = useDispatch();
@@ -55,18 +56,12 @@ export default function CustomTable() {
                   className="ct-delete"
                   onClick={() => {
                     const rowId = row.id;
-                    dispatch(deleteRow(start + i));
+                    // dispatch(deleteRow(start + i));
 
-                    const host = document.querySelector("custom-table");
-
-                    host?.dispatchEvent(
-                      new CustomEvent("row-delete", {
-                        detail: { rowId: rowId },
-                        bubbles: true,
-                        composed: true,
-                      })
-                    );
-
+                    sendToJmix("ROW_DELETE", { 
+                      rowId: rowId,
+                      rowIndex: start + i
+                    });
                   }}
                 >
                   ✕

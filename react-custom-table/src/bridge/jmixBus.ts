@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { EnvelopeV1 } from "./types";
 
-declare global {
-  interface Window {
-    ReactBridge?: { notify: (msg: any) => void };
-  }
-}
+// declare global {
+//   interface Window {
+//     ReactBridge?: { notify: (msg: any) => void };
+//   }
+// }
 
 export const JMIX_EVENT = "jmix:ui";
 
@@ -36,11 +36,7 @@ export function sendToJmix(type: string, payload?: any, correlationId?: string) 
     correlationId,
   };
 
-  if (window.ReactBridge?.notify) {
-    window.ReactBridge.notify(msg);
-    return;
-  }
-
-  // fallback: client-side only (optional)
-  window.dispatchEvent(new CustomEvent("react:ui", { detail: msg }));
+  const host = document.querySelector("custom-table");
+  
+  host?.dispatchEvent(new CustomEvent("react:ui", { detail: msg }));
 }

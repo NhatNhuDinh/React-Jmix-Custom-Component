@@ -3,7 +3,7 @@ import type { Middleware } from "@reduxjs/toolkit";
 import { eventReceived } from "../jmixSlice";
 // import { sendToJmix } from "../jmixBus";
 
-import {setLoaded } from "../../Table/TableSlice";
+import {deleteRow, setLoaded } from "../../Table/TableSlice";
 
 
 export const tableMiddleware: Middleware = (store) => (next) => (action: any) => {
@@ -14,6 +14,12 @@ export const tableMiddleware: Middleware = (store) => (next) => (action: any) =>
     switch (msg.type) {
         case "TABLE_LOAD": {
             store.dispatch(setLoaded(true));
+            break;
+        }
+        case "ROW_DELETE": {
+            console.log("Deleting row at index", msg.payload.rowIndex);
+            
+            store.dispatch(deleteRow(msg.payload.rowIndex));
             break;
         }
 

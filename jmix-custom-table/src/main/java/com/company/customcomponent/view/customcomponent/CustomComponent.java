@@ -2,6 +2,7 @@ package com.company.customcomponent.view.customcomponent;
 
 
 import com.company.customcomponent.component.customtable.CustomeTable;
+import com.company.customcomponent.component.customtable.handler.HandlerReactEvent;
 import com.company.customcomponent.events.UiEventEmitter;
 import com.company.customcomponent.view.main.MainView;
 import com.vaadin.flow.component.ClickEvent;
@@ -10,6 +11,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import io.jmix.flowui.kit.component.button.JmixButton;
 import io.jmix.flowui.view.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Map;
 
@@ -21,13 +23,17 @@ public class CustomComponent extends StandardView {
     @ViewComponent
     private VerticalLayout root;
 
+    @Autowired
+    private HandlerReactEvent handlerReactEvent;
     @Subscribe
     public void onInit(final InitEvent event) {
         CustomeTable table = new CustomeTable();
         table.getStyle().setWidth("100%");
-        table.addRowDeleteListener(e -> {
-            System.out.println(e.getRowId());
-        });
+
+        table.addReactUiListener(e ->
+            handlerReactEvent.handleData(e)
+        );
+
         root.add(table);
     }
 

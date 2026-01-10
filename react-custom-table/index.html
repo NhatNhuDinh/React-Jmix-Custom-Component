@@ -12,6 +12,7 @@
   <div id="root"></div>
   <script type="module" src="/src/main.tsx"></script>
   <button onclick="loadTableData()">Open Event</button>
+  <button onclick="deteleRow()">Delete Row</button>
   <script>
     function loadTableData() {
       const envelope = {
@@ -20,6 +21,29 @@
         ts: Date.now(),
         source: "html-button",
         payload: {},
+        correlationId: crypto.randomUUID()
+      };
+
+      const jmix = new CustomEvent("jmix:ui", {
+        detail: envelope,
+        bubbles: true,
+        composed: true
+      });
+
+      window.dispatchEvent(jmix);
+    }
+
+
+    function deteleRow() {
+       const envelope = {
+        v: 1,
+        type: "ROW_DELETE",
+        ts: Date.now(),
+        source: "html-button",
+        payload: {
+          rowId: "some-row-id",
+          rowIndex: 0
+        },
         correlationId: crypto.randomUUID()
       };
 

@@ -1757,10 +1757,10 @@ const Vm = {
     }
   }
 }), {
-  setColumns: s1,
-  setDataTable: r1,
+  setColumns: r1,
+  setDataTable: o1,
   setPage: qy,
-  setPageSize: o1,
+  setPageSize: d1,
   deleteRow: Km,
   setLoaded: Jm
 } = f0.actions, wm = f0.reducer, Wm = i0({
@@ -1770,13 +1770,44 @@ const Vm = {
     eventReceived: (i, r) => {
     }
   }
-}), { eventReceived: c0 } = Wm.actions, km = (i) => (r) => (o) => (o.type !== c0.type || o.payload.type === "TABLE_LOAD" && i.dispatch(Jm(!0)), r(o)), $m = [km], Fm = Nm({
+}), { eventReceived: c0 } = Wm.actions, km = (i) => (r) => (o) => {
+  if (o.type !== c0.type) return r(o);
+  const s = o.payload;
+  switch (s.type) {
+    case "TABLE_LOAD": {
+      i.dispatch(Jm(!0));
+      break;
+    }
+    case "ROW_DELETE": {
+      console.log("Deleting row at index", s.payload.rowIndex), i.dispatch(Km(s.payload.rowIndex));
+      break;
+    }
+  }
+  return r(o);
+}, $m = [km], Fm = Nm({
   reducer: {
     table: wm
   },
   middleware: (i) => i().concat(...$m)
-});
-function Im() {
+}), Yy = "jmix:ui";
+function Im(i) {
+  const r = (o) => {
+    const s = o;
+    !s.detail || s.detail.v !== 1 || (console.log(s.detail), i(s.detail));
+  };
+  return window.addEventListener(Yy, r), () => window.removeEventListener(Yy, r);
+}
+function Pm(i, r, o) {
+  const s = {
+    v: 1,
+    type: i,
+    ts: Date.now(),
+    payload: r ?? {},
+    correlationId: o
+  };
+  document.querySelector("custom-table")?.dispatchEvent(new CustomEvent("react:ui", { detail: s }));
+}
+function t1() {
   const i = Ky(), {
     columns: r,
     dataTable: o,
@@ -1808,13 +1839,10 @@ function Im() {
             className: "ct-delete",
             onClick: () => {
               const C = g.id;
-              i(Km(O + N)), document.querySelector("custom-table")?.dispatchEvent(
-                new CustomEvent("row-delete", {
-                  detail: { rowId: C },
-                  bubbles: !0,
-                  composed: !0
-                })
-              );
+              Pm("ROW_DELETE", {
+                rowId: C,
+                rowIndex: O + N
+              });
             },
             children: "✕"
           }
@@ -1847,21 +1875,13 @@ function Im() {
     ] })
   ] });
 }
-const Yy = "jmix:ui";
-function Pm(i) {
-  const r = (o) => {
-    const s = o;
-    !s.detail || s.detail.v !== 1 || (console.log(s.detail), i(s.detail));
-  };
-  return window.addEventListener(Yy, r), () => window.removeEventListener(Yy, r);
-}
-function t1() {
+function l1() {
   const i = Ky();
-  return el.useEffect(() => Pm((r) => i(c0(r))), [i]), /* @__PURE__ */ Ot.jsx(Im, {});
+  return el.useEffect(() => Im((r) => i(c0(r))), [i]), /* @__PURE__ */ Ot.jsx(t1, {});
 }
 var $c = { exports: {} }, Na = {}, Fc = { exports: {} }, Ic = {};
 var jy;
-function l1() {
+function e1() {
   return jy || (jy = 1, (function(i) {
     function r(A, H) {
       var L = A.length;
@@ -2081,12 +2101,12 @@ function l1() {
   })(Ic)), Ic;
 }
 var xy;
-function e1() {
-  return xy || (xy = 1, Fc.exports = l1()), Fc.exports;
+function u1() {
+  return xy || (xy = 1, Fc.exports = e1()), Fc.exports;
 }
 var Pc = { exports: {} }, Vt = {};
 var Gy;
-function u1() {
+function a1() {
   if (Gy) return Vt;
   Gy = 1;
   var i = mi();
@@ -2219,7 +2239,7 @@ function u1() {
   }, Vt.version = "19.2.3", Vt;
 }
 var Xy;
-function a1() {
+function n1() {
   if (Xy) return Pc.exports;
   Xy = 1;
   function i() {
@@ -2230,13 +2250,13 @@ function a1() {
         console.error(r);
       }
   }
-  return i(), Pc.exports = u1(), Pc.exports;
+  return i(), Pc.exports = a1(), Pc.exports;
 }
 var Qy;
-function n1() {
+function i1() {
   if (Qy) return Na;
   Qy = 1;
-  var i = e1(), r = mi(), o = a1();
+  var i = u1(), r = mi(), o = n1();
   function s(t) {
     var l = "https://react.dev/errors/" + t;
     if (1 < arguments.length) {
@@ -11970,7 +11990,7 @@ Error generating stack: ` + u.message + `
   }, Na.version = "19.2.3", Na;
 }
 var Zy;
-function i1() {
+function f1() {
   if (Zy) return $c.exports;
   Zy = 1;
   function i() {
@@ -11981,21 +12001,21 @@ function i1() {
         console.error(r);
       }
   }
-  return i(), $c.exports = n1(), $c.exports;
+  return i(), $c.exports = i1(), $c.exports;
 }
-var f1 = i1();
-class c1 extends HTMLElement {
+var c1 = f1();
+class s1 extends HTMLElement {
   root;
   connectedCallback() {
-    this.style.display = "block", this.root = f1.createRoot(this), this.root.render(
-      /* @__PURE__ */ Ot.jsx(Fh, { store: Fm, children: /* @__PURE__ */ Ot.jsx(t1, {}) })
+    this.style.display = "block", this.root = c1.createRoot(this), this.root.render(
+      /* @__PURE__ */ Ot.jsx(Fh, { store: Fm, children: /* @__PURE__ */ Ot.jsx(l1, {}) })
     );
   }
   disconnectedCallback() {
     this.root?.unmount(), this.root = void 0;
   }
 }
-customElements.get("custom-table") || customElements.define("custom-table", c1);
+customElements.get("custom-table") || customElements.define("custom-table", s1);
 export {
-  c1 as CustomTable
+  s1 as CustomTable
 };
