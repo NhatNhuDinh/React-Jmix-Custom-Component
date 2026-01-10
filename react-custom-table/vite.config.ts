@@ -6,13 +6,13 @@ export default defineConfig({
   plugins: [react()],
   define: {
     "process.env.NODE_ENV": JSON.stringify("production"),
-    "process.env": {}, 
+    "process.env": {},
   },
   build: {
     lib: {
       entry: resolve(__dirname, "src/custom-table-element.tsx"),
       name: "CustomTable",
-      fileName: () => "custom-table-element.es.js",
+      fileName: () => "react-custom-table.js",
       formats: ["es"],
     }
   },

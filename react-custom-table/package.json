@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "postbuild": "copy dist\\react-custom-table.js C:\\Users\\adim\\Downloads\\React-Jmix-Custom-Component\\jmix-custom-table\\src\\main\\frontend\\src\\component\\custom-table\\ /Y && copy dist\\reac-custom-table.css C:\\Users\\adim\\Downloads\\React-Jmix-Custom-Component\\jmix-custom-table\\src\\main\\frontend\\src\\component\\custom-table\\ /Y",
     "lint": "eslint .",
     "preview": "vite preview"
   },

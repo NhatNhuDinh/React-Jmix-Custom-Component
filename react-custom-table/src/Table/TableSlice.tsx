@@ -47,8 +47,9 @@ export const tableSlice = createSlice({
     setPageSize(state, action: PayloadAction<number>) {
       state.pageSize = action.payload
     },
-    deleteRow(state, action: PayloadAction<number>) {
-      state.dataTable.splice(action.payload, 1)
+    deleteRowById(state, action: PayloadAction<number | string>) {
+      const id = String(action.payload);
+      state.dataTable = state.dataTable.filter(r => String(r.id) !== id);
     },
     setLoaded(state, action: PayloadAction<boolean>) {
       state.loaded = action.payload
@@ -61,7 +62,7 @@ export const {
   setDataTable,
   setPage,
   setPageSize,
-  deleteRow,
+  deleteRowById,
   setLoaded
 } = tableSlice.actions
 

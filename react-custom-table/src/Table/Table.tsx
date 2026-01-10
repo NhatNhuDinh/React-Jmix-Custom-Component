@@ -2,7 +2,9 @@
 import "../index.css";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../app/store";
-import { deleteRow, setPage } from "./TableSlice";
+import { setPage } from "./TableSlice";
+import { sendToJmix } from "../bridge/jmixBus";
+import { useEffect } from "react";
 
 export default function CustomTable() {
   const dispatch = useDispatch();
@@ -14,6 +16,11 @@ export default function CustomTable() {
     pageSize,
     loaded,
   } = useSelector((state: RootState) => state.table);
+
+  useEffect(() => {
+    const totalPages = Math.max(1, Math.ceil(dataTable.length / pageSize));
+    if (page > totalPages - 1) dispatch(setPage(totalPages - 1));
+  }, [dataTable.length, pageSize, page, dispatch]);
 
 
   if (!loaded) {
@@ -54,19 +61,18 @@ export default function CustomTable() {
                 <button
                   className="ct-delete"
                   onClick={() => {
-                    const rowId = row.id;
-                    dispatch(deleteRow(start + i));
+                    const corr = `${Date.now()}-${Math.random().toString(16).slice(2)}`;
 
-                    const host = document.querySelector("custom-table");
-
-                    host?.dispatchEvent(
-                      new CustomEvent("row-delete", {
-                        detail: { rowId: rowId },
-                        bubbles: true,
-                        composed: true,
-                      })
+                    sendToJmix(
+                      "ROW_DELETE_REQUESTED",
+                      {
+                        rowId: row.id,
+                        page,
+                        pageSize,
+                        filters: {},
+                      },
+                      corr
                     );
-
                   }}
                 >
                   ✕
