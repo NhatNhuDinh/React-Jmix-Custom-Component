@@ -3,20 +3,24 @@ package com.company.customcomponent.view.customcomponent;
 
 import com.company.customcomponent.bridge.ReactBridge;
 import com.company.customcomponent.bridge.ReactEnvelope;
-import com.company.customcomponent.bridge.ReactEventRouter;
 import com.company.customcomponent.bridge.ReactMessageParser;
 import com.company.customcomponent.bridge.handlers.DataRequestedHandler;
-import com.company.customcomponent.component.customtable.App;
+import com.company.customcomponent.component.customSchema.CustomSchema;
 import com.company.customcomponent.events.UiEventEmitter;
 import com.company.customcomponent.view.main.MainView;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
+import io.jmix.flowui.Dialogs;
+import io.jmix.flowui.app.inputdialog.DialogActions;
+import io.jmix.flowui.app.inputdialog.DialogOutcome;
+import io.jmix.flowui.app.inputdialog.InputParameter;
 import io.jmix.flowui.kit.component.button.JmixButton;
 import io.jmix.flowui.view.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
 import java.util.Map;
 
 
@@ -28,24 +32,62 @@ public class CustomComponent extends StandardView {
     private VerticalLayout root;
     @Autowired
     private ReactMessageParser parser;
-    @Autowired private DataRequestedHandler dataRequestedHandler;
+    @Autowired
+    private Dialogs dialogs;
 
     @Subscribe
     public void onInit(final InitEvent event) {
-        App table = new App();
-        table.getStyle().setWidth("100%");
-        root.add(table);
-
-        dataRequestedHandler.register(router);
+        CustomSchema schema = new CustomSchema();
+        schema.getStyle().setWidth("100%");
+        root.add(schema);
     }
 
     @Subscribe(id = "loadData", subject = "clickListener")
     public void onLoadDataClick(final ClickEvent<JmixButton> event) {
-        UiEventEmitter.emit(UI.getCurrent(), "TABLE_TRIGGER_LOAD", "ReactHostView",
-                Map.of("page", 0, "pageSize", 10, "filters", Map.of()));
-    }
 
-    private final ReactEventRouter router = new ReactEventRouter();
+        Map<String, Object> schema = Map.of(
+                "autoLayout", true,
+                "tables", List.of(
+                        Map.of(
+                                "id", "tbl_user",
+                                "name", "User",
+                                "tableName", "sec_user",
+                                "columns", List.of(
+                                        Map.of("name", "id", "type", "uuid", "isPrimaryKey", true, "visible", true),
+                                        Map.of("name", "username", "type", "varchar", "visible", true),
+                                        Map.of("name", "orders", "type", "array", "visible", true)
+                                )
+                        ),
+                        Map.of(
+                                "id", "tbl_order",
+                                "name", "Order",
+                                "tableName", "sales_order",
+                                "columns", List.of(
+                                        Map.of("name", "id", "type", "uuid", "isPrimaryKey", true, "visible", true),
+                                        Map.of("name", "user_id", "type", "uuid", "isForeignKey", true, "visible", true)
+                                )
+                        )
+                ),
+                "relationships", List.of(
+                        Map.of(
+                                "type", "array",
+                                "relationshipType", "1-n",
+                                "sourceNodeId", "tbl_user",
+                                "targetNodeId", "tbl_order",
+                                "sourceKey", "id",
+                                "targetKey", "user_id",
+                                "fieldName", "orders"
+                        )
+                )
+        );
+
+        UiEventEmitter.emit(
+                UI.getCurrent(),
+                "SCHEMA_LOAD",
+                "ReactHostView",
+                schema
+        );
+    }
 
     @Subscribe
     public void onBeforeShow(BeforeShowEvent event) {
@@ -61,11 +103,22 @@ public class CustomComponent extends StandardView {
         bridge.setOnMessage(json -> {
             ReactEnvelope env = parser.parse(json);
 
-            UI ui = bridge.getUI().orElse(null);
-            if (ui == null) return;
+            if(env.getType().equals("field:add")) {
+                dialogs.createInputDialog(this)
+                        .withHeader("Nhập trường muốn thêm")
+                        .withParameters(
+                                InputParameter.stringParameter("name").withLabel("Tên trường").withRequired(true)
 
-            // đảm bảo chạy trong UI thread
-            ui.access(() -> router.dispatch(ui, env));
+                        )
+                        .withActions(DialogActions.OK_CANCEL)
+                        .withCloseListener(closeEvent -> {
+                            if (closeEvent.closedWith(DialogOutcome.OK)) {
+                                String name = closeEvent.getValue("name");
+
+                            }
+                        })
+                        .open();
+            }
         });
     }
 

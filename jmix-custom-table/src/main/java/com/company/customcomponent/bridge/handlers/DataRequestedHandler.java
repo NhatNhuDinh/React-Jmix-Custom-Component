@@ -3,6 +3,7 @@ package com.company.customcomponent.bridge.handlers;
 import com.company.customcomponent.bridge.ReactEventRouter;
 import com.company.customcomponent.events.UiEventEmitter;
 import com.company.customcomponent.service.ReactDataService;
+import io.jmix.flowui.Dialogs;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -17,6 +18,11 @@ public class DataRequestedHandler {
     }
 
     public void register(ReactEventRouter router) {
+
+        router.on("field:add",  (ui, msg) -> {
+            System.out.println(msg.getPayload());
+        });
+
 
         router.on("DATA_REQUESTED", (ui, msg) -> {
             String corr = msg.getCorrelationId();
