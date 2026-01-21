@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<fragment xmlns="http://jmix.io/schema/flowui/fragment">
+    <content>
+        <vbox id="root" classNames="sidebar-root" width="100%" height="100%">
+            <!-- Header Section -->
+            <vbox classNames="sidebar-header" width="100%" spacing="true">
+                <hbox classNames="header-top" width="100%" spacing="true" alignItems="CENTER" justifyContent="BETWEEN">
+                    <label text="Tables" classNames="header-title"/>
+                    <button id="addTable" text="Thêm"/>
+                </hbox>
+                <textField id="searchField" placeholder="Search tables..." classNames="search-field" width="100%"/>
+            </vbox>
+
+            <!-- Scrollable Content Area -->
+            <vbox id="contentArea" classNames="sidebar-content" width="100%" height="100%" spacing="false">
+            </vbox>
+        </vbox>
+    </content>
+</fragment>

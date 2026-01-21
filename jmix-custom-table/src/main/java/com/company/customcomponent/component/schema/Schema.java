@@ -1,14 +1,14 @@
-package com.company.customcomponent.component.customtable;
+package com.company.customcomponent.component.schema;
 
 import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.shared.Registration;
 
-@Tag("custom-table")
-@JsModule("./src/component/custom-table/MyReactTable.js")
-@CssImport("./src/component/custom-table/MyReactTable.css")
-public class CustomeTable extends Component {
+@Tag("schema-element")
+@JsModule("./src/component/schema/schema.es.js")
+@CssImport("./src/component/schema/style.css")
+public class Schema extends Component {
 
     /* =====================
        Public listener API
@@ -23,14 +23,14 @@ public class CustomeTable extends Component {
        ===================== */
     @DomEvent("react:ui")
     public static class ReactUiEvent
-            extends ComponentEvent<CustomeTable> {
+            extends ComponentEvent<Schema> {
 
         private final String type;
         private final String payloadJson;
         private final String envelopeJson;
 
         public ReactUiEvent(
-                CustomeTable source,
+                Schema source,
                 boolean fromClient,
 
                 // envelope fields

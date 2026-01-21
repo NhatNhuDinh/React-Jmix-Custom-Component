@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<fragment xmlns="http://jmix.io/schema/flowui/fragment">
+    <content>
+        <vbox id="root">
+            <tabSheet width="100%" height="100%">
+                <tab id="chonMau" label="Chọn mẫu">
+                    <fragment class="com.company.customcomponent.view.schema.fragment.dialog.SchemaTableSelectFragment" />
+                </tab>
+                <tab id="thuCong" label="Thủ công">
+                    <button text="OKKKKKKKKK"></button>
+                </tab>
+                <tab id="api" label="Import API">
+                    <button text="OKKKKKKKKK"></button>
+                </tab>
+                <tab id="schema" label="Import Schema">
+                    <button text="OKKKKKKKKK"></button>
+                </tab>
+                <tab id="export" label="Export">
+                    <button text="OKKKKKKKKK"></button>
+                </tab>
+            </tabSheet>
+        </vbox>
+    </content>
+</fragment>

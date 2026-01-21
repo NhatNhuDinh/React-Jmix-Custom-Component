@@ -1,4 +1,4 @@
-package com.company.customcomponent.component.customtable.dto;
+package com.company.customcomponent.component.schema.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

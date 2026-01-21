@@ -1,6 +1,6 @@
-package com.company.customcomponent.component.customtable.parser;
+package com.company.customcomponent.component.schema.parser;
 
-import com.company.customcomponent.component.customtable.dto.ReactEnvelope;
+import com.company.customcomponent.component.schema.dto.ReactEnvelope;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Component;
 

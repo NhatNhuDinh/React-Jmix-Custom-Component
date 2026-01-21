@@ -3,8 +3,8 @@
 
     <menu id="application" title="msg://com.company.customcomponent/menu.application.title" opened="true">
         <item view="User.list" title="msg://com.company.customcomponent.view.user/UserListView.title"/>
-        <item view="CustomComponent"
-              title="msg://com.company.customcomponent.view.customcomponent/customComponent.title"/>
+        <item view="SchemaView"
+              title="Schema"/>
     </menu>
 
 </menu-config>
